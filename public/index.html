@@ -48,12 +48,14 @@
     <input type="number" placeholder="输入全部数字" id="inputNumber">
     <input type="button" value="提交" id="submit" onclick="vm.submitOrder()">
     <input type="button" value="清空" id="cancel" onclick="vm.cancelOrder()">
-    <div id="one">第一球</div>
-    <div id="two">第二球</div>
-    <div id="three">第三球</div>
-    <div id="four">第四球</div>
-    <div id="fix">第五球</div>
-    <div id="all">总和</div>
+    <div id="needPay">
+        <div id="one">第一球</div>
+        <div id="two">第二球</div>
+        <div id="three">第三球</div>
+        <div id="four">第四球</div>
+        <div id="fix">第五球</div>
+        <div id="all">总和</div>
+    </div>
     <div id="show">
         <div class="show">
             <div>第一球</div>
@@ -83,6 +85,7 @@
 <script>
     var vm = {
         result: [],
+        oldResult: [],
         startNumber: null,
         boolResult : [
             {
@@ -94,7 +97,7 @@
             {
                 index:1,
                 time:0,
-                bool:false,
+                bool:true,
                 what:0,
             },
             {
@@ -106,7 +109,7 @@
             {
                 index:3,
                 time:0,
-                bool:false,
+                bool:true,
                 what:0,
             },
             {
@@ -116,78 +119,13 @@
                 what:0,
             },
         ],
-        betsNumber: {
-            value:[
-                {
-                    index:0,
-                    text:['0','0','0','1','1','1'],
-                    frequency:0,//次数
-                    need:{
-                        what:'',
-                        how:'',
-                    },
-                },
-                {
-                    index:1,
-                    text:['1','1','1','0','0','0'],
-                    frequency:0,//次数
-                    need:{
-                        what:'',
-                        how:'',
-                    },
-                },
-                {
-                    index:2,
-                    text:['0','0','0','1','1','1'],
-                    frequency:0,//次数
-                    need:{
-                        what:'',
-                        how:'',
-                    },
-                },
-                {
-                    index:3,
-                    text:['1','1','1','0','0','0'],
-                    frequency:0,//次数
-                    need:{
-                        what:'',
-                        how:'',
-                    },
-                },
-                {
-                    index:4,
-                    text:['0','0','0','1','1','1'],
-                    frequency:0,//次数
-                    need:{
-                        what:'',
-                        how:'',
-                    },
-                },
-            ],
-            size:{
-                text:['大','大','大','小','小','小'],
-                frequency:0,//次数
-                need:{
-                    what:'',
-                    how:'',
-                },
-            },
-            singlendDouble:{
-                text:['双','双','双','单','单','单'],
-                frequency:0,//次数
-                need:{
-                    what:'',
-                    how:'',
-                },
-            },
-        },
         submitHtml : document.getElementById('submit'),
         inputNumberHtml : document.getElementById('inputNumber'),
         numberHtml : document.getElementById('number'),
         inputBaseHtml : document.getElementById('inputBase'),
         submitOrder : function () {
             var that = this;
-            that.startNumber = that.inputBaseHtml.value;
+            that.startNumber = that.inputBaseHtml.value ? that.inputBaseHtml.value : 5;
             var value = that.inputNumberHtml.value;
             var allValue = that.inputNumberHtml.value;
             value = value.split('');
@@ -208,24 +146,37 @@
                         that.result.push(test);
                     }
                 }
-                that.setNumberHtml(that.result)
+                that.setNumberHtml(that.result,function (result) {
+                    that.setNeedPayHtml(result);
+                })
             }else{
                 that.cancelOrder();
             }
+            that.cancelOrder();
         },
-        setNumberHtml:function(result) {
+        setNumberHtml:function(result,callback) {
             var that = this;
             that.numberHtml.innerHTML = '';
             var html = '';
             result.reverse();
+
+            for (var j = 0; j < that.boolResult.length; j++) {
+                var boolResultElement = that.boolResult[j];
+                boolResultElement.time++
+            }
+
             for (var i = 0; i < result.length; i++) {
                 var result_text = result[i];
                 var allNumber = 0;
                 html +='<div class="number">';
-                console.log(that.boolResult[i],i);
                 for (var j = 0; j < result_text.value.length; j++) {
                     var resultTextElement = result_text.value[j];
-                    that.boolResult[i].time ++ ;
+
+                    if(that.boolResult[j].time > 3){
+                        that.boolResult[j].bool = !that.boolResult[j].bool;
+                        that.boolResult[j].time = 1
+                    }
+
                     if(!(resultTextElement instanceof Object)){
                         html += '<div>'+resultTextElement+'</div>';
                         allNumber += parseInt(resultTextElement);
@@ -237,16 +188,15 @@
                         //     that.boolResult[i].time = 0
                         // }
                         result[i].value[j] = {
-                            text:{
-                                what:resultTextElement % 2,
-                                how:'',
-                                num:resultTextElement,
-                                need:that.boolResult[i].bool ? '0':'1'
-                            },
+                            index:j,
+                            what:resultTextElement % 2,
+                            how:0,
+                            num:resultTextElement,
+                            need:that.boolResult[j].bool ? 0:1
                         }
                     }else{
-                        html += '<div>'+resultTextElement.text.num+'</div>';
-                        allNumber += parseInt(resultTextElement.text.num);
+                        html += '<div>'+resultTextElement.num+'</div>';
+                        allNumber += parseInt(resultTextElement.num);
                     }
                 }
                 if(result_text.size == '大' || result_text.size == '小' || !result_text.size){
@@ -262,28 +212,60 @@
                     }
                     html += '<div>'+result_text.size+'</div><div>'+result_text.singlendDouble+'</div>';
                     result[i].size = {
-                        text:{
-                            what:result_text.size,
-                            how:'',
-                        },
+                        what:result_text.size,
+                        how:'',
                     };
                     result[i].singlendDouble = {
-                        text:{
-                            what:result_text.singlendDouble,
-                            how:'',
-                        },
+                        what:result_text.singlendDouble,
+                        how:'',
                     };
                 }else{
-                    html += '<div>'+result_text.size.text.what+'</div><div>'+result_text.singlendDouble.text.what+'</div>';
+                    html += '<div>'+result_text.size.what+'</div><div>'+result_text.singlendDouble.what+'</div>';
                 }
                 /**
                  * 先赋值页面数据，再修改数据格式
                  **/
             }
+            callback(result);
             result.reverse();
             that.numberHtml.innerHTML = html;
         },
+        setNeedPayHtml:function(result){
+            var that = this;
+            var resultlength = result.length;
+            for (var i = 0; i < resultlength; i++) {
+                var _result = result[i];
+                for (var j = 0; j < _result.value.length; j++) {
+                    var _resultValue = _result.value[j];
+                    if(resultlength == 1){
+                        _resultValue.how = that.startNumber
+                    }else{
+                        if(_resultValue.what == _resultValue.need){
+                            _resultValue.how = that.startNumber
+                        }else{
+                            console.log(i,j,_resultValue.how);
+                            _resultValue.how = _resultValue.how * 2 + that.startNumber
+                        }
+                    }
+                }
+            }
+            that.oldResult.push(JSON.parse(JSON.stringify(result)));
+            for (var i = 0; i < result.length; i++) {
+                var result_item = result[i];
+                for (var j = 0; j < result_item.value.length; j++) {
+                    var item_value = result_item[j];
 
+
+                }
+
+            }
+
+            console.log(that.oldResult);
+            // for (var i = 0; i < arguments.length; i++) {
+            //     var argument = arguments[i];
+            //     console.log(argument);
+            // }
+        },
         cancelOrder : function () {
             var that = this;
             that.inputNumberHtml.value = ''
