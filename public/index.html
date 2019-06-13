@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>计算</title>
+    <style>
+        body{
+            margin-top: 50px;
+        }
+        input{
+            padding: 5px;
+        }
+        #inputNumber{
+            border: 1px solid;
+            width: 50%;
+        }
+        #inputBase{
+            border: 1px solid;
+            width: 60%;
+            margin-bottom: 35px;
+        }
+        #submit,#cancel{
+            border: 1px solid;
+            width: 20%;
+        }
+        .both{
+            clear: both;
+            overflow: hidden;
+        }
+        #show{
+            margin-bottom: 30px;
+        }
+        .show div:nth-child(1),.show div:nth-child(2),.show div:nth-child(3),.show div:nth-child(4),.show div:nth-child(5),
+        .number div:nth-child(1),.number div:nth-child(2),.number div:nth-child(3),.number div:nth-child(4),.number div:nth-child(5){
+            width: 14%;
+            float: left;
+        }
+        .show div:nth-child(6),.show div:nth-child(7),
+        .number div:nth-child(6),.number div:nth-child(7){
+            width: 15%;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <input type="number" placeholder="输入基数" id="inputBase">
+    <input type="number" placeholder="输入全部数字" id="inputNumber">
+    <input type="button" value="提交" id="submit" onclick="vm.submitOrder()">
+    <input type="button" value="清空" id="cancel" onclick="vm.cancelOrder()">
+    <div id="one">第一球</div>
+    <div id="two">第二球</div>
+    <div id="three">第三球</div>
+    <div id="four">第四球</div>
+    <div id="fix">第五球</div>
+    <div id="all">总和</div>
+    <div id="show">
+        <div class="show">
+            <div>第一球</div>
+            <div>第二球</div>
+            <div>第三球</div>
+            <div>第四球</div>
+            <div>第五期</div>
+            <div>总和大小</div>
+            <div>总和单双</div>
+        </div>
+
+        <div class="both"></div>
+    </div>
+    <div id="number">
+        <div class="number">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    var vm = {
+        result: [],
+        startNumber: null,
+        boolResult : [
+            {
+                index:0,
+                time:0,
+                bool:false,
+                what:0,
+            },
+            {
+                index:1,
+                time:0,
+                bool:false,
+                what:0,
+            },
+            {
+                index:2,
+                time:0,
+                bool:false,
+                what:0,
+            },
+            {
+                index:3,
+                time:0,
+                bool:false,
+                what:0,
+            },
+            {
+                index:4,
+                time:0,
+                bool:false,
+                what:0,
+            },
+        ],
+        betsNumber: {
+            value:[
+                {
+                    index:0,
+                    text:['0','0','0','1','1','1'],
+                    frequency:0,//次数
+                    need:{
+                        what:'',
+                        how:'',
+                    },
+                },
+                {
+                    index:1,
+                    text:['1','1','1','0','0','0'],
+                    frequency:0,//次数
+                    need:{
+                        what:'',
+                        how:'',
+                    },
+                },
+                {
+                    index:2,
+                    text:['0','0','0','1','1','1'],
+                    frequency:0,//次数
+                    need:{
+                        what:'',
+                        how:'',
+                    },
+                },
+                {
+                    index:3,
+                    text:['1','1','1','0','0','0'],
+                    frequency:0,//次数
+                    need:{
+                        what:'',
+                        how:'',
+                    },
+                },
+                {
+                    index:4,
+                    text:['0','0','0','1','1','1'],
+                    frequency:0,//次数
+                    need:{
+                        what:'',
+                        how:'',
+                    },
+                },
+            ],
+            size:{
+                text:['大','大','大','小','小','小'],
+                frequency:0,//次数
+                need:{
+                    what:'',
+                    how:'',
+                },
+            },
+            singlendDouble:{
+                text:['双','双','双','单','单','单'],
+                frequency:0,//次数
+                need:{
+                    what:'',
+                    how:'',
+                },
+            },
+        },
+        submitHtml : document.getElementById('submit'),
+        inputNumberHtml : document.getElementById('inputNumber'),
+        numberHtml : document.getElementById('number'),
+        inputBaseHtml : document.getElementById('inputBase'),
+        submitOrder : function () {
+            var that = this;
+            that.startNumber = that.inputBaseHtml.value;
+            var value = that.inputNumberHtml.value;
+            var allValue = that.inputNumberHtml.value;
+            value = value.split('');
+             var test= {
+                 value:value,
+                 allValue:allValue,
+                 size:'',
+                 singlendDouble:'',
+             };
+            if(value.length == 5){
+                if(that.result.length == 0){
+                    that.result.push(test);
+                }else{
+                    if(that.result[that.result.length-1].allValue == allValue){
+                        that.cancelOrder();
+                        return;
+                    }else{
+                        that.result.push(test);
+                    }
+                }
+                that.setNumberHtml(that.result)
+            }else{
+                that.cancelOrder();
+            }
+        },
+        setNumberHtml:function(result) {
+            var that = this;
+            that.numberHtml.innerHTML = '';
+            var html = '';
+            result.reverse();
+            for (var i = 0; i < result.length; i++) {
+                var result_text = result[i];
+                var allNumber = 0;
+                html +='<div class="number">';
+                console.log(that.boolResult[i],i);
+                for (var j = 0; j < result_text.value.length; j++) {
+                    var resultTextElement = result_text.value[j];
+                    that.boolResult[i].time ++ ;
+                    if(!(resultTextElement instanceof Object)){
+                        html += '<div>'+resultTextElement+'</div>';
+                        allNumber += parseInt(resultTextElement);
+                        /**
+                         * 先赋值页面数据，再修改数据格式
+                         **/
+                        // if(that.boolResult[i].time == 3){
+                        //     that.boolResult[i].bool = !that.boolResult[i].bool;
+                        //     that.boolResult[i].time = 0
+                        // }
+                        result[i].value[j] = {
+                            text:{
+                                what:resultTextElement % 2,
+                                how:'',
+                                num:resultTextElement,
+                                need:that.boolResult[i].bool ? '0':'1'
+                            },
+                        }
+                    }else{
+                        html += '<div>'+resultTextElement.text.num+'</div>';
+                        allNumber += parseInt(resultTextElement.text.num);
+                    }
+                }
+                if(result_text.size == '大' || result_text.size == '小' || !result_text.size){
+                    if(allNumber >= 23){
+                        result_text.size = '大'
+                    }else{
+                        result_text.size = '小'
+                    }
+                    if(allNumber % 2){
+                        result_text.singlendDouble = '单'
+                    }else{
+                        result_text.singlendDouble = '双'
+                    }
+                    html += '<div>'+result_text.size+'</div><div>'+result_text.singlendDouble+'</div>';
+                    result[i].size = {
+                        text:{
+                            what:result_text.size,
+                            how:'',
+                        },
+                    };
+                    result[i].singlendDouble = {
+                        text:{
+                            what:result_text.singlendDouble,
+                            how:'',
+                        },
+                    };
+                }else{
+                    html += '<div>'+result_text.size.text.what+'</div><div>'+result_text.singlendDouble.text.what+'</div>';
+                }
+                /**
+                 * 先赋值页面数据，再修改数据格式
+                 **/
+            }
+            result.reverse();
+            that.numberHtml.innerHTML = html;
+        },
+
+        cancelOrder : function () {
+            var that = this;
+            that.inputNumberHtml.value = ''
+        }
+    }
+</script>
