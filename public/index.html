@@ -2,51 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>计算</title>
     <style>
-        body {
+        body{
             margin-top: 50px;
         }
-
-        input {
+        input{
             padding: 5px;
         }
-
-        #inputNumber {
+        #inputNumber{
             border: 1px solid;
             width: 50%;
         }
-
-        #inputBase {
+        #inputBase{
             border: 1px solid;
             width: 60%;
             margin-bottom: 35px;
         }
-
-        #submit, #cancel {
+        #submit,#cancel{
             border: 1px solid;
             width: 20%;
         }
-
-        .both {
+        .both{
             clear: both;
             overflow: hidden;
         }
-
-        #show {
+        #show{
             margin-bottom: 30px;
         }
-
-        .show div:nth-child(1), .show div:nth-child(2), .show div:nth-child(3), .show div:nth-child(4), .show div:nth-child(5),
-        .number div:nth-child(1), .number div:nth-child(2), .number div:nth-child(3), .number div:nth-child(4), .number div:nth-child(5) {
+        .show div:nth-child(1),.show div:nth-child(2),.show div:nth-child(3),.show div:nth-child(4),.show div:nth-child(5),
+        .number div:nth-child(1),.number div:nth-child(2),.number div:nth-child(3),.number div:nth-child(4),.number div:nth-child(5){
             width: 14%;
             float: left;
         }
-
-        .show div:nth-child(6), .show div:nth-child(7),
-        .number div:nth-child(6), .number div:nth-child(7) {
+        .show div:nth-child(6),.show div:nth-child(7),
+        .number div:nth-child(6),.number div:nth-child(7){
             width: 15%;
             float: left;
         }
@@ -96,79 +87,79 @@
         result: [],
         oldResult: [],
         startNumber: 10,
-        boolResult: [
+        boolResult : [
             {
-                index: 0,
-                time: 0,
-                bool: false,
-                what: 0,
+                index:0,
+                time:0,
+                bool:false,
+                what:0,
             },
             {
-                index: 1,
-                time: 0,
-                bool: false,
-                what: 0,
+                index:1,
+                time:0,
+                bool:true,
+                what:0,
             },
             {
-                index: 2,
-                time: 0,
-                bool: false,
-                what: 0,
+                index:2,
+                time:0,
+                bool:false,
+                what:0,
             },
             {
-                index: 3,
-                time: 0,
-                bool: false,
-                what: 0,
+                index:3,
+                time:0,
+                bool:true,
+                what:0,
             },
             {
-                index: 4,
-                time: 0,
-                bool: false,
-                what: 0,
+                index:4,
+                time:0,
+                bool:false,
+                what:0,
             },
         ],
-        submitHtml: document.getElementById('submit'),
-        inputNumberHtml: document.getElementById('inputNumber'),
-        numberHtml: document.getElementById('number'),
-        inputBaseHtml: document.getElementById('inputBase'),
-        needPayOneHtml: document.getElementById('one'),
-        needPayTwoHtml: document.getElementById('two'),
-        needPayThreeHtml: document.getElementById('three'),
-        needPayFourHtml: document.getElementById('four'),
-        needPayFixHtml: document.getElementById('fix'),
-        submitOrder: function () {
+        submitHtml : document.getElementById('submit'),
+        inputNumberHtml : document.getElementById('inputNumber'),
+        numberHtml : document.getElementById('number'),
+        inputBaseHtml : document.getElementById('inputBase'),
+        needPayOneHtml : document.getElementById('one'),
+        needPayTwoHtml : document.getElementById('two'),
+        needPayThreeHtml : document.getElementById('three'),
+        needPayFourHtml : document.getElementById('four'),
+        needPayFixHtml : document.getElementById('fix'),
+        submitOrder : function () {
             var that = this;
             that.startNumber = that.inputBaseHtml.value ? that.inputBaseHtml.value : that.startNumber;
             var value = that.inputNumberHtml.value;
             var allValue = that.inputNumberHtml.value;
             value = value.split('');
-            var test = {
-                value: value,
-                allValue: allValue,
-                size: '',
-                singlendDouble: '',
+            var test= {
+                value:value,
+                allValue:allValue,
+                size:'',
+                singlendDouble:'',
             };
-            if (value.length == 5) {
-                if (that.result.length == 0) {
+            if(value.length == 5){
+                if(that.result.length == 0){
                     that.result.push(test);
-                } else {
-                    if (that.result[that.result.length - 1].allValue == allValue) {
+                }else{
+                    if(that.result[that.result.length-1].allValue == allValue){
                         that.cancelOrder();
                         return;
-                    } else {
+                    }else{
                         that.result.push(test);
                     }
                 }
-                that.setNumberHtml(that.result, function (result) {
+                that.setNumberHtml(that.result,function (result) {
                     that.setNeedPayHtml(result);
                 })
-            } else {
+            }else{
                 that.cancelOrder();
             }
             that.cancelOrder();
         },
-        setNumberHtml: function (result, callback) {
+        setNumberHtml:function(result,callback) {
             var that = this;
             that.numberHtml.innerHTML = '';
             var html = '';
@@ -182,17 +173,17 @@
             for (var i = 0; i < result.length; i++) {
                 var result_text = result[i];
                 var allNumber = 0;
-                html += '<div class="number">';
+                html +='<div class="number">';
                 for (var j = 0; j < result_text.value.length; j++) {
                     var resultTextElement = result_text.value[j];
 
-                    if (that.boolResult[j].time > 3) {
+                    if(that.boolResult[j].time > 3){
                         that.boolResult[j].bool = !that.boolResult[j].bool;
                         that.boolResult[j].time = 1
                     }
 
-                    if (!(resultTextElement instanceof Object)) {
-                        html += '<div>' + resultTextElement + '</div>';
+                    if(!(resultTextElement instanceof Object)){
+                        html += '<div>'+resultTextElement+'</div>';
                         allNumber += parseInt(resultTextElement);
                         /**
                          * 先赋值页面数据，再修改数据格式
@@ -202,39 +193,39 @@
                         //     that.boolResult[i].time = 0
                         // }
                         result[i].value[j] = {
-                            index: j,
-                            what: resultTextElement % 2,
-                            how: 0,
-                            num: resultTextElement,
-                            need: that.boolResult[j].bool ? 0 : 1
+                            index:j,
+                            what:resultTextElement % 2,
+                            how:0,
+                            num:resultTextElement,
+                            need:that.boolResult[j].bool ? 0:1
                         }
-                    } else {
-                        html += '<div>' + resultTextElement.num + '</div>';
+                    }else{
+                        html += '<div>'+resultTextElement.num+'</div>';
                         allNumber += parseInt(resultTextElement.num);
                     }
                 }
-                if (result_text.size == '大' || result_text.size == '小' || !result_text.size) {
-                    if (allNumber >= 23) {
+                if(result_text.size == '大' || result_text.size == '小' || !result_text.size){
+                    if(allNumber >= 23){
                         result_text.size = '大'
-                    } else {
+                    }else{
                         result_text.size = '小'
                     }
-                    if (allNumber % 2) {
+                    if(allNumber % 2){
                         result_text.singlendDouble = '单'
-                    } else {
+                    }else{
                         result_text.singlendDouble = '双'
                     }
-                    html += '<div>' + result_text.size + '</div><div>' + result_text.singlendDouble + '</div>';
+                    html += '<div>'+result_text.size+'</div><div>'+result_text.singlendDouble+'</div>';
                     result[i].size = {
-                        what: result_text.size,
-                        how: '',
+                        what:result_text.size,
+                        how:'',
                     };
                     result[i].singlendDouble = {
-                        what: result_text.singlendDouble,
-                        how: '',
+                        what:result_text.singlendDouble,
+                        how:'',
                     };
-                } else {
-                    html += '<div>' + result_text.size.what + '</div><div>' + result_text.singlendDouble.what + '</div>';
+                }else{
+                    html += '<div>'+result_text.size.what+'</div><div>'+result_text.singlendDouble.what+'</div>';
                 }
                 /**
                  * 先赋值页面数据，再修改数据格式
@@ -244,79 +235,43 @@
             callback(result);
             that.numberHtml.innerHTML = html;
         },
-        setNeedPayHtml: function (result) {
+        setNeedPayHtml:function(result){
             var that = this;
             var resultlength = result.length;
             for (var i = 0; i < resultlength; i++) {
                 var _result = result[i];
                 for (var j = 0; j < _result.value.length; j++) {
                     var _resultValue = _result.value[j];
-                    if (resultlength == 1) {
+                    if(resultlength == 1){
                         _resultValue.how = that.startNumber;
-                    } else {
-                        if (i > 0) {
-                            if (result[i - 1].value[j].what == result[i - 1].value[j].need) {
-                                _resultValue.how = that.startNumber;
-                            } else {
-                                _resultValue.how = result[i - 1].value[j].how * 2 + that.startNumber;
+                    }else{
+                        if(i>0){
+                            if(result[i-1].value[j].what == result[i-1].value[j].need){
+                                _resultValue.how =  that.startNumber;
+                            }else{
+                                _resultValue.how = result[i-1].value[j].how * 2 + that.startNumber;
                             }
-                        } else {
-                            _resultValue.how = that.startNumber;
+                        }else{
+                            _resultValue.how =  that.startNumber;
                         }
-                        if (_resultValue.how > that.startNumber * 15) {
-                            _resultValue.how = that.startNumber * 3;
+                        if(_resultValue.how >that.startNumber*31){
+                            _resultValue.how =  that.startNumber * 3;
                         }
                     }
                 }
             }
-            console.log(result);
             that.oldResult.push(JSON.parse(JSON.stringify(result)));
-
-            var one ,two,three,four,fix;
-            one = result[resultlength - 1].value[0].how;
-            two = result[resultlength - 1].value[1].how;
-            three = result[resultlength - 1].value[2].how;
-            four = result[resultlength - 1].value[2].how;
-            fix = result[resultlength - 1].value[3].how;
-            if(resultlength>1){
-                if(result[resultlength - 2].value[0].what == result[resultlength - 2].value[0].need){
-                    one = that.startNumber
-                }else{
-                    one = result[resultlength - 1].value[0].how
-                }
-                if(result[resultlength - 2].value[1].what == result[resultlength - 2].value[1].need){
-                    two = that.startNumber
-                }else{
-                    two = result[resultlength - 1].value[1].how
-                }
-                if(result[resultlength - 2].value[2].what == result[resultlength - 2].value[2].need){
-                    three = that.startNumber
-                }else{
-                    three = result[resultlength - 1].value[2].how
-                }
-                if(result[resultlength - 2].value[3].what == result[resultlength - 2].value[3].need){
-                    four = that.startNumber
-                }else{
-                    four = result[resultlength - 1].value[3].how
-                }
-                if(result[resultlength - 2].value[4].what == result[resultlength - 2].value[4].need){
-                    fix = that.startNumber
-                }else{
-                    fix = result[resultlength - 1].value[4].how
-                }
-            }
-            that.needPayOneHtml.innerHTML = '第一球---' + (result[resultlength - 1].value[0].need ? '单' : '双') + '---' + one;
-            that.needPayTwoHtml.innerHTML = '第二球---' + (result[resultlength - 1].value[1].need ? '单' : '双') + '---' + two;
-            that.needPayThreeHtml.innerHTML = '第三球---' + (result[resultlength - 1].value[2].need ? '单' : '双') + '---' + three;
-            that.needPayFourHtml.innerHTML = '第四球---' + (result[resultlength - 1].value[3].need ? '单' : '双') + '---' + four;
-            that.needPayFixHtml.innerHTML = '第五球---' + (result[resultlength - 1].value[4].need ? '单' : '双') + '---' + fix;
-
+            that.needPayOneHtml.innerHTML = '第一球---' + (result[resultlength-1].value[0].need ?'单':'双') + '---' + result[resultlength-1].value[0].how ;
+            that.needPayTwoHtml.innerHTML = '第二球---' + (result[resultlength-1].value[1].need ?'单':'双') + '---' + result[resultlength-1].value[1].how;
+            that.needPayThreeHtml.innerHTML = '第三球---' + (result[resultlength-1].value[2].need ?'单':'双') + '---' + result[resultlength-1].value[2].how;
+            that.needPayFourHtml.innerHTML = '第四球---' + (result[resultlength-1].value[3].need ?'单':'双') + '---' + result[resultlength-1].value[3].how;
+            that.needPayFixHtml.innerHTML = '第五球---' + (result[resultlength-1].value[4].need ?'单':'双') + '---' + result[resultlength-1].value[4].how;
             // for (var i = 0; i < arguments.length; i++) {
             //     var argument = arguments[i];
             //     console.log(argument);
             // }
         },
-        cancelOrder: function () {
+        cancelOrder : function () {
             var that = this;
             that.inputNumberHtml.value = ''
         }
