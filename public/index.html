@@ -123,6 +123,11 @@
         inputNumberHtml : document.getElementById('inputNumber'),
         numberHtml : document.getElementById('number'),
         inputBaseHtml : document.getElementById('inputBase'),
+        needPayOneHtml : document.getElementById('one'),
+        needPayTwoHtml : document.getElementById('two'),
+        needPayThreeHtml : document.getElementById('three'),
+        needPayFourHtml : document.getElementById('four'),
+        needPayFixHtml : document.getElementById('fix'),
         submitOrder : function () {
             var that = this;
             that.startNumber = that.inputBaseHtml.value ? that.inputBaseHtml.value : 5;
@@ -226,8 +231,8 @@
                  * 先赋值页面数据，再修改数据格式
                  **/
             }
-            callback(result);
             result.reverse();
+            callback(result);
             that.numberHtml.innerHTML = html;
         },
         setNeedPayHtml:function(result){
@@ -238,31 +243,29 @@
                 for (var j = 0; j < _result.value.length; j++) {
                     var _resultValue = _result.value[j];
                     if(resultlength == 1){
-                        _resultValue.how = that.startNumber
+                        _resultValue.how = that.startNumber;
                     }else{
-                        if(_resultValue.what == _resultValue.need){
-                            _resultValue.how = that.startNumber
-                        }else{
-                            console.log(i,j,_resultValue.how,_resultValue.what,_resultValue.need);
-                            if(i>0){
-                                _resultValue.how = result[i-1].value[j].how * 2 + that.startNumber
+                        if(i>0){
+                            if(result[i-1].value[j].what == result[i-1].value[j].need){
+                                _resultValue.how =  that.startNumber;
+                            }else{
+                                _resultValue.how = result[i-1].value[j].how * 2 + that.startNumber;
                             }
+                        }else{
+                            _resultValue.how =  that.startNumber;
+                        }
+                        if(_resultValue.how >that.startNumber*31){
+                            _resultValue.how =  that.startNumber * 3;
                         }
                     }
                 }
             }
             that.oldResult.push(JSON.parse(JSON.stringify(result)));
-            for (var i = 0; i < result.length; i++) {
-                var result_item = result[i];
-                for (var j = 0; j < result_item.value.length; j++) {
-                    var item_value = result_item[j];
-
-
-                }
-
-            }
-
-            console.log(that.oldResult);
+            that.needPayOneHtml.innerHTML = '第一球---' + (result[resultlength-1].value[0].need ?'单':'双') + '---' + result[resultlength-1].value[0].how ;
+            that.needPayTwoHtml.innerHTML = '第二球---' + (result[resultlength-1].value[1].need ?'单':'双') + '---' + result[resultlength-1].value[1].how;
+            that.needPayThreeHtml.innerHTML = '第三球---' + (result[resultlength-1].value[2].need ?'单':'双') + '---' + result[resultlength-1].value[2].how;
+            that.needPayFourHtml.innerHTML = '第四球---' + (result[resultlength-1].value[3].need ?'单':'双') + '---' + result[resultlength-1].value[3].how;
+            that.needPayFixHtml.innerHTML = '第五球---' + (result[resultlength-1].value[4].need ?'单':'双') + '---' + result[resultlength-1].value[4].how;
             // for (var i = 0; i < arguments.length; i++) {
             //     var argument = arguments[i];
             //     console.log(argument);
