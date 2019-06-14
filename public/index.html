@@ -187,9 +187,16 @@
                 for (var j = 0; j < result_text.value.length; j++) {
                     var resultTextElement = result_text.value[j];
 
-                    if (that.boolResult[j].time > 3) {
+                    if(i == 0){
                         that.boolResult[j].bool = !that.boolResult[j].bool;
-                        that.boolResult[j].time = 1
+                    }else{
+                        if(i == 1){
+                            that.boolResult[j].bool = !that.boolResult[j].bool;
+                        }
+                        if (that.boolResult[j].time > 3) {
+                            that.boolResult[j].bool = !that.boolResult[j].bool;
+                            that.boolResult[j].time = 1
+                        }
                     }
 
                     if (!(resultTextElement instanceof Object)) {
