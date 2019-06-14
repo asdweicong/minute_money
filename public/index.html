@@ -271,19 +271,38 @@
             }
             console.log(result);
             that.oldResult.push(JSON.parse(JSON.stringify(result)));
-            if(resultlength > 1){
-                that.needPayOneHtml.innerHTML = '第一球---' + (result[resultlength - 1].value[0].need ? '单' : '双') + '---' + ((result[resultlength - 1].value[0].what == result[resultlength - 1].value[0].need) ? that.startNumber : (result[resultlength - 1].value[0].how * 2 + that.startNumber));
-                that.needPayTwoHtml.innerHTML = '第二球---' + (result[resultlength - 1].value[1].need ? '单' : '双') + '---' + ((result[resultlength - 1].value[1].what == result[resultlength - 1].value[1].need) ? that.startNumber : (result[resultlength - 1].value[1].how * 2 + that.startNumber));
-                that.needPayThreeHtml.innerHTML = '第三球---' + (result[resultlength - 1].value[2].need ? '单' : '双') + '---' + ((result[resultlength - 1].value[2].what == result[resultlength - 1].value[2].need) ? that.startNumber : (result[resultlength - 1].value[2].how * 2 + that.startNumber));
-                that.needPayFourHtml.innerHTML = '第四球---' + (result[resultlength - 1].value[3].need ? '单' : '双') + '---' + ((result[resultlength - 1].value[3].what == result[resultlength - 1].value[3].need) ? that.startNumber : (result[resultlength - 1].value[3].how * 2 + that.startNumber));
-                that.needPayFixHtml.innerHTML = '第五球---' + (result[resultlength - 1].value[4].need ? '单' : '双') + '---' + ((result[resultlength - 1].value[4].what == result[resultlength - 1].value[4].need) ? that.startNumber : (result[resultlength - 1].value[4].how * 2 + that.startNumber));
+
+            var one ,two,three,four,fix;
+            if(result[resultlength - 1].value[0].how == result[resultlength - 1].value[0].need){
+                one = that.startNumber
             }else{
-                that.needPayOneHtml.innerHTML = '第一球---' + (result[resultlength - 1].value[0].need ? '单' : '双') + '---' + result[resultlength - 1].value[0].how;
-                that.needPayTwoHtml.innerHTML = '第二球---' + (result[resultlength - 1].value[1].need ? '单' : '双') + '---' + result[resultlength - 1].value[1].how;
-                that.needPayThreeHtml.innerHTML = '第三球---' + (result[resultlength - 1].value[2].need ? '单' : '双') + '---' + result[resultlength - 1].value[2].how;
-                that.needPayFourHtml.innerHTML = '第四球---' + (result[resultlength - 1].value[3].need ? '单' : '双') + '---' + result[resultlength - 1].value[3].how;
-                that.needPayFixHtml.innerHTML = '第五球---' + (result[resultlength - 1].value[4].need ? '单' : '双') + '---' + result[resultlength - 1].value[4].how;
+                one = result[resultlength - 1].value[0].how
             }
+            if(result[resultlength - 1].value[1].how == result[resultlength - 1].value[1].need){
+                two = that.startNumber
+            }else{
+                two = result[resultlength - 1].value[1].how
+            }
+            if(result[resultlength - 1].value[2].how == result[resultlength - 1].value[2].need){
+                three = that.startNumber
+            }else{
+                three = result[resultlength - 1].value[2].how
+            }
+            if(result[resultlength - 1].value[3].how == result[resultlength - 1].value[3].need){
+                four = that.startNumber
+            }else{
+                four = result[resultlength - 1].value[2].how
+            }
+            if(result[resultlength - 1].value[4].how == result[resultlength - 1].value[4].need){
+                fix = that.startNumber
+            }else{
+                fix = result[resultlength - 1].value[3].how
+            }
+            that.needPayOneHtml.innerHTML = '第一球---' + (result[resultlength - 1].value[0].need ? '单' : '双') + '---' + one;
+            that.needPayTwoHtml.innerHTML = '第二球---' + (result[resultlength - 1].value[1].need ? '单' : '双') + '---' + two;
+            that.needPayThreeHtml.innerHTML = '第三球---' + (result[resultlength - 1].value[2].need ? '单' : '双') + '---' + three;
+            that.needPayFourHtml.innerHTML = '第四球---' + (result[resultlength - 1].value[3].need ? '单' : '双') + '---' + four;
+            that.needPayFixHtml.innerHTML = '第五球---' + (result[resultlength - 1].value[4].need ? '单' : '双') + '---' + fix;
 
             // for (var i = 0; i < arguments.length; i++) {
             //     var argument = arguments[i];
