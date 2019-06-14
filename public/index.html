@@ -86,7 +86,7 @@
     var vm = {
         result: [],
         oldResult: [],
-        startNumber: null,
+        startNumber: 10,
         boolResult : [
             {
                 index:0,
@@ -109,7 +109,7 @@
             {
                 index:3,
                 time:0,
-                bool:true,
+                bool:false,
                 what:0,
             },
             {
@@ -130,7 +130,7 @@
         needPayFixHtml : document.getElementById('fix'),
         submitOrder : function () {
             var that = this;
-            that.startNumber = that.inputBaseHtml.value ? that.inputBaseHtml.value : 5;
+            that.startNumber = that.inputBaseHtml.value ? that.inputBaseHtml.value : that.startNumber;
             var value = that.inputNumberHtml.value;
             var allValue = that.inputNumberHtml.value;
             value = value.split('');
@@ -246,7 +246,7 @@
                         _resultValue.how = that.startNumber;
                     }else{
                         if(i>0){
-                            if(result[i].value[j].what == result[i].value[j].need){
+                            if(result[i-1].value[j].what == result[i-1].value[j].need){
                                 _resultValue.how =  that.startNumber;
                             }else{
                                 _resultValue.how = result[i-1].value[j].how * 2 + that.startNumber;
