@@ -187,17 +187,17 @@
                 for (var j = 0; j < result_text.value.length; j++) {
                     var resultTextElement = result_text.value[j];
 
-                    if(i == 0){
-                        that.boolResult[j].bool = !that.boolResult[j].bool;
-                    }else{
-                        if(i == 1){
-                            that.boolResult[j].bool = !that.boolResult[j].bool;
-                        }
+                    // if(i == 0){
+                    //     that.boolResult[j].bool = !that.boolResult[j].bool;
+                    // }else{
+                    //     if(i == 1){
+                    //         that.boolResult[j].bool = !that.boolResult[j].bool;
+                    //     }
                         if (that.boolResult[j].time > 3) {
                             that.boolResult[j].bool = !that.boolResult[j].bool;
                             that.boolResult[j].time = 1
                         }
-                    }
+                    // }
 
                     if (!(resultTextElement instanceof Object)) {
                         html += '<div>' + resultTextElement + '</div>';
@@ -263,7 +263,7 @@
                         }
                     } else {
                         if(i > 0){
-                            if (result[i].value[j].what == result[i].value[j].need) {
+                            if (result[i].value[j].what == result[i-1].value[j].need) {
                                 console.log('a',i,j,that.startNumber);
                                 _resultValue.how = that.startNumber;
                             } else {
@@ -279,11 +279,11 @@
             }
             console.log(result);
             that.oldResult.push(JSON.parse(JSON.stringify(result)));
-            // that.needPayOneHtml.innerHTML = '第一球---' + (result[resultlength - 1].value[0].need ? '单' : '双') + '---' + result[resultlength - 1].value[0].how;
-            // that.needPayTwoHtml.innerHTML = '第二球---' + (result[resultlength - 1].value[1].need ? '单' : '双') + '---' + result[resultlength - 1].value[1].how;
-            // that.needPayThreeHtml.innerHTML = '第三球---' + (result[resultlength - 1].value[2].need ? '单' : '双') + '---' + result[resultlength - 1].value[2].how;
-            // that.needPayFourHtml.innerHTML = '第四球---' + (result[resultlength - 1].value[3].need ? '单' : '双') + '---' + result[resultlength - 1].value[3].how;
-            // that.needPayFixHtml.innerHTML = '第五球---' + (result[resultlength - 1].value[4].need ? '单' : '双') + '---' + result[resultlength - 1].value[4].how;
+            that.needPayOneHtml.innerHTML = '第一球---' + (result[resultlength - 1].value[0].need ? '单' : '双') + '---' + result[resultlength - 1].value[0].how;
+            that.needPayTwoHtml.innerHTML = '第二球---' + (result[resultlength - 1].value[1].need ? '单' : '双') + '---' + result[resultlength - 1].value[1].how;
+            that.needPayThreeHtml.innerHTML = '第三球---' + (result[resultlength - 1].value[2].need ? '单' : '双') + '---' + result[resultlength - 1].value[2].how;
+            that.needPayFourHtml.innerHTML = '第四球---' + (result[resultlength - 1].value[3].need ? '单' : '双') + '---' + result[resultlength - 1].value[3].how;
+            that.needPayFixHtml.innerHTML = '第五球---' + (result[resultlength - 1].value[4].need ? '单' : '双') + '---' + result[resultlength - 1].value[4].how;
         },
         cancelOrder: function () {
             var that = this;
