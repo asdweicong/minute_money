@@ -63,7 +63,8 @@
     <div id="three">第三球</div>
     <div id="four">第四球</div>
     <div id="fix">第五球</div>
-    <div id="all">总和</div>
+    <div id="allDouble">总单双</div>
+    <div id="allSize">总大小</div>
 </div>
 <div id="show">
     <div class="show">
@@ -72,8 +73,8 @@
         <div>第三球</div>
         <div>第四球</div>
         <div>第五期</div>
-        <div>总和大小</div>
-        <div>总和单双</div>
+        <div>总大小</div>
+        <div>总单双</div>
     </div>
 
     <div class="both"></div>
@@ -95,8 +96,23 @@
     var vm = {
         result: [],
         oldResult: [],
-        startNumber: 5,
+        startNumber: 3,
+        beishu:2.2,
+        oneTime:3,
+        maxNumber:500,
         tackBool:false,
+        theSumBoolResult:{
+            size:{
+                time: 0,
+                bool: false,
+                what: 0,
+            },
+            singlendDouble:{
+                time: 0,
+                bool: false,
+                what: 0,
+            },
+        },
         boolResult: [
             {
                 index: 0,
@@ -138,6 +154,8 @@
         needPayThreeHtml: document.getElementById('three'),
         needPayFourHtml: document.getElementById('four'),
         needPayFixHtml: document.getElementById('fix'),
+        needPayAllSizeHtml: document.getElementById('allSize'),
+        needPayAllDoubleHtml: document.getElementById('allDouble'),
         submitOrder: function () {
             var that = this;
             that.startNumber = that.inputBaseHtml.value ? that.inputBaseHtml.value : that.startNumber;
@@ -180,25 +198,28 @@
                 boolResultElement.time++
             }
 
+            that.theSumBoolResult.size.time++;
+            that.theSumBoolResult.singlendDouble.time++;
             for (var i = 0; i < result.length; i++) {
                 var result_text = result[i];
                 var allNumber = 0;
                 html += '<div class="number">';
+                
+                if (that.theSumBoolResult.size.time > that.oneTime) {
+                    that.theSumBoolResult.size.bool = !that.theSumBoolResult.size.bool;
+                    that.theSumBoolResult.size.time = 1
+                }
+                if (that.theSumBoolResult.singlendDouble.time > that.oneTime) {
+                    that.theSumBoolResult.singlendDouble.bool = !that.theSumBoolResult.singlendDouble.bool;
+                    that.theSumBoolResult.singlendDouble.time = 1
+                }
                 for (var j = 0; j < result_text.value.length; j++) {
                     var resultTextElement = result_text.value[j];
 
-                    // if(i == 0){
-                    //     that.boolResult[j].bool = !that.boolResult[j].bool;
-                    // }else{
-                    //     if(i == 1){
-                    //         that.boolResult[j].bool = !that.boolResult[j].bool;
-                    //     }
-                        if (that.boolResult[j].time > 3) {
-                            that.boolResult[j].bool = !that.boolResult[j].bool;
-                            that.boolResult[j].time = 1
-                        }
-                    // }
-
+                    if (that.boolResult[j].time > that.oneTime) {
+                        that.boolResult[j].bool = !that.boolResult[j].bool;
+                        that.boolResult[j].time = 1
+                    }
                     if (!(resultTextElement instanceof Object)) {
                         html += '<div>' + resultTextElement + '</div>';
                         allNumber += parseInt(resultTextElement);
@@ -231,11 +252,13 @@
                     html += '<div>' + result_text.size + '</div><div>' + result_text.singlendDouble + '</div>';
                     result[i].size = {
                         what: result_text.size,
-                        how: '',
+                        how: 0,
+                        need: that.theSumBoolResult.size.bool ? '大' : '小'
                     };
                     result[i].singlendDouble = {
                         what: result_text.singlendDouble,
-                        how: '',
+                        how: 0,
+                        need: that.theSumBoolResult.singlendDouble.bool ? '单' : '双'
                     };
                 } else {
                     html += '<div>' + result_text.size.what + '</div><div>' + result_text.singlendDouble.what + '</div>';
@@ -259,23 +282,56 @@
                         if (result[i].value[j].what == result[i].value[j].need) {
                             _resultValue.how = that.startNumber;
                         } else {
-                            _resultValue.how = that.startNumber * 2.6 + that.startNumber;
+                            _resultValue.how = that.startNumber * that.beishu + that.startNumber;
                         }
                     } else {
                         if(i > 0){
                             if (result[i].value[j].what == result[i-1].value[j].need) {
                                 _resultValue.how = that.startNumber;
                             } else {
-                                _resultValue.how = result[i - 1].value[j].how * 2.6 + that.startNumber;
+                                _resultValue.how = result[i - 1].value[j].how * that.beishu + that.startNumber;
                             }
                         }
-                        if (_resultValue.how > 400) {
-                            _resultValue.how = that.startNumber * 2.6 + that.startNumber;
+                        if (_resultValue.how > that.maxNumber) {
+                            _resultValue.how = that.startNumber * that.beishu + that.startNumber;
                         }
                     }
                     _resultValue.how = parseInt(_resultValue.how)
                 }
+
+                if (resultlength == 1) {
+                    if (result[i].size.what == result[i].size.need) {
+                        result[i].size.how = that.startNumber;
+                    } else {
+                        result[i].size.how = that.startNumber * that.beishu + that.startNumber;
+                    }
+                    if (result[i].singlendDouble.what == result[i].singlendDouble.need) {
+                        result[i].singlendDouble.how = that.startNumber;
+                    } else {
+                        result[i].singlendDouble.how = that.startNumber * that.beishu + that.startNumber;
+                    }
+                }else {
+                    if(i > 0){
+                        if (result[i].size.what == result[i].size.need) {
+                            result[i].size.how = that.startNumber;
+                        } else {
+                            result[i].size.how = result[i - 1].size.how * that.beishu + that.startNumber;
+                        }
+                        
+                        if (result[i].singlendDouble.what == result[i-1].singlendDouble.need) {
+                            result[i].singlendDouble.how = that.startNumber;
+                        } else {
+                            result[i].singlendDouble.how = result[i - 1].singlendDouble.how * that.beishu + that.startNumber;
+                        }
+                    }
+                    if (result[i].singlendDouble.how > that.maxNumber) {
+                        result[i].singlendDouble.how = that.startNumber * that.beishu + that.startNumber;
+                    }
+                }
+                result[i].size.how = parseInt(result[i].size.how)
+                result[i].singlendDouble.how = parseInt(result[i].singlendDouble.how)
             }
+            console.log(that.theSumBoolResult)
             console.log(result);
             that.oldResult.push(JSON.parse(JSON.stringify(result)));
             that.needPayOneHtml.innerHTML = '第一球---' + (result[resultlength - 1].value[0].need ? '单' : '双') + '---' + result[resultlength - 1].value[0].how;
@@ -283,6 +339,8 @@
             that.needPayThreeHtml.innerHTML = '第三球---' + (result[resultlength - 1].value[2].need ? '单' : '双') + '---' + result[resultlength - 1].value[2].how;
             that.needPayFourHtml.innerHTML = '第四球---' + (result[resultlength - 1].value[3].need ? '单' : '双') + '---' + result[resultlength - 1].value[3].how;
             that.needPayFixHtml.innerHTML = '第五球---' + (result[resultlength - 1].value[4].need ? '单' : '双') + '---' + result[resultlength - 1].value[4].how;
+            // that.needPayAllSizeHtml.innerHTML = '总大小---' + (result[resultlength - 1].size.need) + '---' + result[resultlength - 1].size.how;
+            // that.needPayAllDoubleHtml.innerHTML = '总单双---' + (result[resultlength - 1].singlendDouble.need) + '---' + result[resultlength - 1].singlendDouble.how;
         },
         cancelOrder: function () {
             var that = this;
